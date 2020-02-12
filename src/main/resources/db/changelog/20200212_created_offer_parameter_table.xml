@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="00000000000002" author="lukasz.dziedzic">
+        <createTable tableName="parameter">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="key" type="int">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="value" type="varchar(100)">
+                <constraints unique="false" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="offer_parameter">
+            <column name="offer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parameter_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+        <addPrimaryKey columnNames="offer_id, parameter_id" tableName="offer_parameter"/>
+
+        <addForeignKeyConstraint baseColumnNames="offer_id"
+                                 baseTableName="offer_parameter"
+                                 constraintName="fk_offer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="offer"/>
+
+        <addForeignKeyConstraint baseColumnNames="parameter_id"
+                                 baseTableName="offer_parameter"
+                                 constraintName="fk_parameter_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="parameter"/>
+    </changeSet>
+</databaseChangeLog>
