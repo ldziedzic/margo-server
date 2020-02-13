@@ -5,6 +5,9 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <changeSet id="00000000000001" author="lukasz.dziedzic">
+        <sql>
+            ALTER DATABASE margo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+        </sql>
         <createTable tableName="offer">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

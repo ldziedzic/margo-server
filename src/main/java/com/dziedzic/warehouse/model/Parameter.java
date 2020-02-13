@@ -4,8 +4,6 @@ package com.dziedzic.warehouse.model;/*
  * @date 12.02.2020
  */
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +21,8 @@ public class Parameter {
     private Long id;
 
     @NotNull
-    private Integer key;
+    @Column(length=100)
+    private String name;
 
     @NotNull
     @Column(length=100)
@@ -32,13 +31,13 @@ public class Parameter {
     public Parameter() {
     }
 
-    public Parameter(@NotNull Integer key, @NotNull String value) {
-        this.key = key;
+    public Parameter(@NotNull String name, @NotNull String value) {
+        this.name = name;
         this.value = value;
     }
 
-    public Integer getKey() {
-        return key;
+    public String getName() {
+        return name;
     }
 
     public String getValue() {

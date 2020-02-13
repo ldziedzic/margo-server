@@ -9,8 +9,8 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="key" type="int">
-                <constraints unique="true" nullable="false"/>
+            <column name="name" type="varchar(100)">
+                <constraints unique="false" nullable="false"/>
             </column>
             <column name="value" type="varchar(100)">
                 <constraints unique="false" nullable="false"/>

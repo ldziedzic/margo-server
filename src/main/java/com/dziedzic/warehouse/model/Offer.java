@@ -47,9 +47,17 @@ public class Offer {
     public Offer() {
     }
 
+    public Offer(@NotNull String signature, Set<Parameter> parameters) {
+        this.signature = signature;
+        this.parameters = parameters;
+    }
 
     public String getSignature() {
         return signature;
+    }
+
+    public Set<Parameter> getParameters() {
+        return parameters;
     }
 }
 
