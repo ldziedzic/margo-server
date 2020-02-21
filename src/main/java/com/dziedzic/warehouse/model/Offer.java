@@ -33,7 +33,6 @@ public class Offer {
     @Column(length=100)
     private String signature;
 
-    @JsonIgnore
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE

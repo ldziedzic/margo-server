@@ -28,12 +28,16 @@ public class Parameter {
     @Column(length=100)
     private String value;
 
+    @Column(length=100)
+    private String description;
+
     public Parameter() {
     }
 
-    public Parameter(@NotNull String name, @NotNull String value) {
+    public Parameter(@NotNull String name, @NotNull String value, String description) {
         this.name = name;
         this.value = value;
+        this.description = description;
     }
 
     public String getName() {
@@ -42,5 +46,9 @@ public class Parameter {
 
     public String getValue() {
         return value;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

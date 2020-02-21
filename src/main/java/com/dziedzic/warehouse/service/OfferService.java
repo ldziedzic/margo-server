@@ -5,6 +5,7 @@ package com.dziedzic.warehouse.service;
  * @date 12.02.2020
  */
 
+import com.dziedzic.warehouse.model.Definition;
 import com.dziedzic.warehouse.model.Offer;
 import com.dziedzic.warehouse.model.Parameter;
 import com.dziedzic.warehouse.repository.OfferRepository;
@@ -22,7 +23,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,15 +42,13 @@ public class OfferService {
         log.info("Getting all offers.");
 
         updateOffers();
-
-
         return offerRepository.findAll();
     }
 
     private void updateOffers() {
         String dataPath = "/home/ftp/test/9561_20200211_134105_001.xml";
 
-
+        Set<Definition> definitions = getDefinitions("/home/ftp/test/definictions.xml");
         try {
 
             File fXmlFile = new File(dataPath);
@@ -61,8 +59,6 @@ public class OfferService {
             doc.getDocumentElement().normalize();
 
             NodeList offers = doc.getElementsByTagName("offer");
-
-
 
             for (int temp = 0; temp < offers.getLength(); temp++) {
                 Node offersNode = offers.item(temp);
@@ -77,7 +73,7 @@ public class OfferService {
                         String key = parameterNode.getAttribute("id");
                         String value = ((parameterNode.getTextContent() == null) ? "" : parameterNode.getTextContent());
 
-                        Parameter parameter = new Parameter(key, value);
+                        Parameter parameter = new Parameter(key, value, findDefinition(definitions, key));
                         parameterRepository.save(parameter);
                         parameters.add(parameter);
                     }
@@ -89,5 +85,38 @@ public class OfferService {
             e.printStackTrace();
         }
 
+    }
+
+    private Set<Definition> getDefinitions(String definitionsFilePath) {
+        Set<Definition> definitions = new HashSet<>();
+        try {
+            File fXmlFile = new File(definitionsFilePath);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+
+            doc.getDocumentElement().normalize();
+
+            Element parametersNode = (Element) doc.getElementsByTagName("parameters").item(0);
+            for (int param_counter = 0; param_counter < parametersNode.getElementsByTagName("p").getLength(); param_counter++) {
+                Element parameterNode = (Element) parametersNode.getElementsByTagName("p").item(param_counter);
+                String key = parameterNode.getAttribute("id");
+                String value = parameterNode.getElementsByTagName("name").item(0).getTextContent();
+
+                Definition definition = new Definition(key, value);
+                definitions.add(definition);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return definitions;
+    }
+
+    private String findDefinition(Set<Definition> definitions, String id) {
+        for (Definition definition: definitions) {
+            if (definition.getId().equals(id))
+                return definition.getDescription();
+        }
+        return "";
     }
 }
